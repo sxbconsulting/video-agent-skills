@@ -1,6 +1,6 @@
 # Grow the watchlist (mode 2)
 
-When `video-agent/competitors.json` doesn't exist yet, is thin in one language, or the creator writes `--search`. Goal: 3 to 6 new usable accounts (8 to 12 on the first run), never a list of 30 unchecked handles.
+When `video-agent/competitors.json` doesn't exist yet, is thin in one language, or the creator writes `--search`. Goal: 3 to 6 new usable accounts (8 to 12 on the first run), never a list of 30 unchecked handles. Everything here is free.
 
 ## The file
 
@@ -15,38 +15,30 @@ When `video-agent/competitors.json` doesn't exist yet, is thin in one language, 
 }
 ```
 
-`lang` = the account's language code; `tier` = `direct` (similar size and niche) or `aspirational` (much bigger, or a neighbour niche whose formats transpose); `use: false` = kept so it isn't proposed again; `platform: "tiktok"` = a TikTok account (no field = Instagram; the same creator on both = two entries). `mix` = the language split of the 5 scripts (one language only: leave it out).
+`lang` = the account's language code; `tier` = `direct` (similar size and niche) or `aspirational` (much bigger, or a neighbour niche whose formats transpose); `use: false` = kept so it isn't proposed again; `platform: "tiktok"` or `"youtube"` = not Instagram (no field = Instagram; the same creator on two platforms = two entries). `mix` = the language split of the 5 scripts (one language only: leave it out).
 
-## 1. Search
+## 1. Find candidates
 
-Ask first: "a creator search costs about $0.007, I'll run 2 or 3 per language". Then Exa through Treg, angles from their niche (`video-agent/voice.md`):
+Ask the creator first: "Which 3 to 5 accounts in your niche do you watch?" Their answer beats any search.
 
-```bash
-treg call exa.creators.search --method POST --data '{"query":"Instagram creators posting reels about <their niche>, <country or language>, comment-to-get CTA","includeDomains":["instagram.com"],"numResults":20,"contents":{"highlights":{"query":"<2 or 3 niche words>","maxCharacters":400}}}' 2>/dev/null
-```
+Then, from their niche words (`video-agent/voice.md`):
 
-- Angles: the niche's main subject; the tools and methods their viewer uses; the result their viewer wants. For a second language, the same subjects with "creators in <language>".
-- Endpoint gone or renamed: `treg catalog search "find Instagram creators by topic"`, then `treg catalog get <id>`.
-- Never `category: people` (it returns LinkedIn). Take the handle from the profile URL (`instagram.com/<handle>/`), never from a `/reel/` or `/p/` link. Drop handles already in the file.
+- **Instagram's own suggestions.** In the Chrome tab, open the profile of the creator and of each good competitor (`https://www.instagram.com/<handle>/`) and read the "Suggested for you" accounts (the arrow next to Follow / Message opens them). Keep the names that look like the niche.
+- **TikTok search** (yt-dlp has no TikTok search): in the Chrome tab, open `https://www.tiktok.com/search/video?q=<2 or 3 niche words>` and read the `@handles` and views of the results (`get_page_text`, or the `href`s matching `/@`). Then check the same handle on Instagram: creators often use one handle everywhere.
+- **YouTube search**: `yt-dlp --flat-playlist --print "%(channel)s|%(uploader_id)s|%(view_count)s|%(title).80s" "ytsearch30:<niche words> shorts"`.
+- **A web search** (the session's search tool): `<niche words> créateur Instagram`, `top <niche> creators <country>`; take handles from `instagram.com/<handle>/` links only, never from a `/reel/` or `/p/` link.
+- Accounts that keep coming up in the reels already studied (tagged, remixed, quoted in a caption) are candidates too.
 
-**TikTok**: search the videos themselves, about $0.001 a call, and keep the authors that come up with niche videos and real views:
-
-```bash
-treg call anyapi.tiktok.search.videos --method POST --data '{"query":"<2 or 3 niche words>"}' 2>/dev/null
-```
-
-The handle is in each video's `url` (`tiktok.com/@<handle>/video/...`). The Instagram creators already in the watchlist often have a TikTok under the same handle: fetch it and check.
-
-Accounts that keep coming up in the reels already studied (tagged, remixed, quoted in a caption) are candidates too, for free.
+Drop handles already in the file. For a second language, the same subjects in that language.
 
 ## 2. Check each candidate
 
-Fetch its reels (SKILL.md step 1), then keep it only if:
+Run the collector of SKILL.md step 1 on it, then keep it only if:
 
-- its reels are about their niche (read 10 captions), not a one-off on the subject among unrelated reels;
+- its reels are about their niche (read the captions of 10 recent reels with `ig-captions.js`), not a one-off on the subject among unrelated reels;
 - at least 10 reels in the last 180 days (it posts, so its median means something);
 - the language is the one searched.
 
 ## 3. Record it
 
-Add each checked account with `platform` (TikTok only), `lang`, `tier`, `niche`, `use`, `added` and `why`. A rejected candidate goes in with `use: false` and its reason, so it isn't searched and checked again.
+Add each checked account with `platform` (when not Instagram), `lang`, `tier`, `niche`, `use`, `added` and `why`. A rejected candidate goes in with `use: false` and its reason, so it isn't searched and checked again.
