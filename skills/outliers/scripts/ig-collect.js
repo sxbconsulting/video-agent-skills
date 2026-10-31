@@ -36,6 +36,8 @@ window.__res = null; window.__prog = 0;
     await new Promise(r => setTimeout(r, 1800 + Math.random() * 1500));
   }
   const all = [...seen.values()];
+  // The pin icon isn't always in the DOM: in a newest-first grid, a leading reel older than one after it is pinned.
+  all.slice(0, 3).forEach((x, i) => { if (all.slice(i + 1, i + 6).some(y => y.age < x.age)) x.pinned = true; });
   const win = all.filter(x => !x.pinned && x.views != null && x.age >= 7 && x.age <= 180);
   const s = win.map(x => x.views).sort((a, b) => a - b);
   const med = s.length >= 10 ? s[Math.floor(s.length / 2)] : null;

@@ -27,6 +27,8 @@ Tools and Instagram rules: step 0 of the `outliers` skill, plus `uv`. Say that t
 
 Show the list and work on the lowest one whose topic is still worth their time, or the number they asked for.
 
+When they name reels or a format ("my last facecams"), open the contact sheets first: check the format is really that one, and say so if it isn't. Score each reel. A reel above 0.7x isn't a flop: say it plainly, look for what still limits it, and don't force a rescue. Compare formats when the flops and the good reels differ in format (real face, avatar, screen), with the sample size and "to test", never as a proven cause.
+
 Fewer than 10 reels in the window: no median, ask them to choose the reel.
 
 Slug: the topic in 2 or 3 words. Everything goes in `video-agent/rescue/<date>-<slug>/`.
@@ -47,12 +49,13 @@ It writes the timed transcript, the numbers (duration, words per minute, speech 
 | Payoff | the most useful line comes late while it could carry the opening |
 | Caption | it doesn't name the topic, or it's the same text as other reels |
 | CTA | no precise word to comment, or several asks |
+| Showing | the steps or the result are only told while a winner shows them on screen |
 
 With `audit.md`, compare with their own watch time. Say "probable" for every cause: nothing proves why one reel flopped.
 
 ## 3. Find what worked on the same topic
 
-Search with the **2 or 3 words the viewer would type**, not a sentence (a long query returns nothing):
+Search with the **2 words the viewer would type** (`panier moyen`, `première vente`). Three words or a sentence often return nothing:
 
 1. Instagram: `https://www.instagram.com/explore/search/keyword/?q=<words>`, then [scripts/ig-search.js](scripts/ig-search.js) with the topic words as its regex. Try 2 wordings at most.
 2. Their watchlist `video-agent/competitors.json`: posts by those accounts come first.
@@ -60,13 +63,13 @@ Search with the **2 or 3 words the viewer would type**, not a sentence (a long q
 
 Keep up to 4 candidates in their language and niche (the caption's topic can be right in the wrong trade: a restaurant's average bill says nothing to an e-commerce viewer).
 
-**Prove each one**, with the math of the `outliers` skill. Likes in a search aren't success. Open each author's `/reels/` page and run `<outliers>/scripts/ig-collect.js` with the shortcode in `TARGETS`:
+**Prove each one**, with the math of the `outliers` skill. Likes in a search aren't success. Open each author's `/reels/` page and run `<outliers>/scripts/ig-collect.js` with the shortcode in `TARGETS`. A target older than 180 days comes back "not found": it can't be proven, use the account's recent outliers instead:
 
 - **3x or more**: a real winner.
 - 1.5x to 3x: promising, say so.
 - Under 1.5x: normal for that account, not a model.
 - `median: null`: the account has under 10 reels in the window, say "unproven". Use it for ideas only, never as evidence.
-- Huge views and almost no likes: a boosted post, out.
+- Likes under 0.2 % of the views (226 000 views, 66 likes): a boosted post, out, whatever its x. Check this on every winner with `ig-captions.js`. When most of an account's reels look boosted, its median proves nothing either: mark it "unproven".
 
 If no candidate reaches 1.5x, say so plainly: the comparison is thin, and the fix rests on the diagnosis. Never call a video a success without its number.
 

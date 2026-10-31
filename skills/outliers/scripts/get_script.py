@@ -47,14 +47,19 @@ def run(url: str, out: Path, model: WhisperModel, lang: str) -> dict:
         tmp = Path(t)
         video = fetch(url, tmp)
         wav = tmp / "a.wav"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-vn", "-ac", "1", "-ar", "16000", str(wav)],
-                       check=True)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-t", "16", "-vf",
                         "fps=1,scale=240:-1,tile=8x2", "-frames:v", "1", str(out / f"{vid}-sheet.jpg")], check=False)
-        with wave.open(str(wav)) as w:
-            duration = w.getnframes() / w.getframerate()
-            pcm = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
-    segments, _ = model.transcribe(pcm, language=lang, vad_filter=True)
+        probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(video)],
+                               capture_output=True, text=True)
+        duration = float(probe.stdout.strip() or 0)
+        # A video with no audio track is a valid case: the script is on the contact sheet.
+        audio = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-vn", "-ac", "1", "-ar", "16000", str(wav)],
+                               capture_output=True).returncode == 0
+        pcm = None
+        if audio:
+            with wave.open(str(wav)) as w:
+                pcm = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
+    segments = model.transcribe(pcm, language=lang, vad_filter=True)[0] if pcm is not None else []
     # Whisper invents credits over silence ("Sous-titrage ...") and may run past the end of the file.
     segs = [(s.start, min(s.end, duration), s.text.strip()) for s in segments
             if s.text.strip() and not NOISE.search(s.text) and s.start < duration]
