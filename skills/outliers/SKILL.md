@@ -31,7 +31,7 @@ TikTok views are far more skewed than Instagram's (medians of a few thousand, ou
 ## 0. Tools
 
 - **Instagram: Claude in Chrome**, the creator's real Chrome with the extension connected, logged in to Instagram. Load the Chrome tools in one ToolSearch call (`tabs_context_mcp`, `tabs_create_mcp`, `navigate`, `javascript_tool`, `tabs_close_mcp`), check the tabs, then work in **one new tab** and close it at the end. Not logged in (the page redirects to `/accounts/login/`): ask them to log in in that Chrome, a secondary account is safer. Never type their password.
-- **Not the built-in browser, not yt-dlp, for Instagram**: logged-out requests get `HTTP 429` (too many requests) on the whole connection for about an hour, and they block the logged-in reads too. Never retry a 429: stop, say so, come back later.
+- **Instagram profiles and grids only in that Chrome**: the built-in browser and yt-dlp on a profile get `HTTP 429` (too many requests) on the whole connection, sometimes for about an hour. yt-dlp is only for one reel at a time, in the transcription step. Never retry a 429: stop, say so, come back later.
 - **TikTok and YouTube Shorts: yt-dlp** (free, no login): `yt-dlp --version`. Missing: `/studio-setup`.
 
 Pace on Instagram: one account at a time, the collector already waits 2 to 3 s between scrolls. About 1 to 3 minutes per account; say it before a run of more than 8 accounts.
@@ -44,7 +44,7 @@ Pace on Instagram: one account at a time, the collector already waits 2 to 3 s b
 for (let i = 0; i < 8 && !window.__res; i++) await new Promise(r => setTimeout(r, 5000)); window.__res || 'progress ' + window.__prog
 ```
 
-Repeat the poll until it returns the JSON (the javascript tool times out after about 45 s, so never wait longer in one call). It scrolls the reels grid until the 180-day window is covered, reads the views on each thumbnail, dates each reel from its shortcode (no reel opened), and returns the median, the outliers and every reel of the window. Save it to `video-agent/outliers/<handle>/<date>.json`. A file less than 7 days old is reused, not fetched again.
+Repeat the poll until it returns the JSON (the javascript tool times out after about 45 s, so never wait longer in one call). It scrolls the reels grid until the 180-day window is covered, reads the views on each thumbnail, dates each reel from its shortcode (no reel opened), and returns the median and the 10 best outliers (the whole window stays in `window.__reels`, read it in slices when you need it). Save it to `video-agent/outliers/<handle>/<date>.json`. A file less than 7 days old is reused, not fetched again.
 
 Then the captions of the outliers, with [scripts/ig-captions.js](scripts/ig-captions.js) (put the shortcodes in its last line, same poll on `window.__caps`): likes, comments, date and the caption's first lines, from each reel page. The likes are the sponsored check of the math, step 5.
 
@@ -96,9 +96,8 @@ From the ranking, keep a long list of ~15, then cut to 5, each cut with a reason
 
 Captions are not hooks. For each finalist, the real first sentence:
 
-- Download it: `yt-dlp -o "video-agent/.tmp/<id>.mp4" "<reel or video URL>"` for TikTok and YouTube. For Instagram, yt-dlp is blocked logged out: in the Chrome tab, open the reel and read the `src` of its `<video>` element with `javascript_tool`, then `ffmpeg -i "<src>" -vn -ac 1 -ar 16000 video-agent/.tmp/<shortcode>.wav` (that link expires within hours, use it at once).
-- Transcribe it like a take with the `short-editing` engine (`short.mjs init video-agent/.tmp/reel-<shortcode> --source <file>`, then `short.mjs words`, read `assets/words-scribe.json`) when its setup has run, or with a local Whisper already on the machine.
-- No speech (music + text on screen): grab one frame per second (`ffmpeg -i <file> -vf "fps=1,scale=240:-1,tile=8x2" -frames:v 1 sheet.jpg`) and read the on-screen text and the shots.
+- `uv run <skill>/scripts/get_script.py video-agent/outliers/sources <reel or video URL> [...]` (Instagram, TikTok, YouTube): it downloads, transcribes locally, keeps the timed transcript, the numbers and a contact sheet of the first 16 s, then deletes the audio and the video.
+- No speech (`parole=False`): read the on-screen text and the shots on the contact sheet.
 - None of this works: read the caption and ask the creator to watch it and type the first sentence.
 
 Two candidates tie: decide on the transcripts.

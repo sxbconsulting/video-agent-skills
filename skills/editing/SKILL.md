@@ -1,6 +1,6 @@
 ---
 name: editing
-description: Entry point for every video job - routes to studio-setup, insta-audit, studio-script, outliers, short-editing, broll, steal, clips, short-translate, codex-images, vox or publish, and continues the project already in progress. Use when the user says /editing, edit, montage, take, short, reel, video, script, audit, publish, or is not sure which video skill to use.
+description: Entry point for every video job - routes to studio-setup, insta-audit, studio-script, outliers, flop-rescue, short-editing, broll, steal, clips, short-translate, codex-images, vox or publish, and continues the project already in progress. Use when the user says /editing, edit, montage, take, short, reel, video, script, audit, publish, or is not sure which video skill to use.
 argument-hint: "[take | url | slug | path] [brief]"
 ---
 
@@ -13,6 +13,7 @@ Route the request to the one skill that owns it, then do the work with that skil
    - No `video-agent/` folder yet, first time, tools, voice, permissions, accounts, keys: `studio-setup`. An edit asked before any setup: run `studio-setup` first (or at least its tools step).
    - Their Instagram stats, "what works on my account", an audit of an account or of their competitors: `insta-audit`.
    - Scripts, ideas for the week, hooks, rewrite, humanize a text, "sounds like AI", what goes viral in their niche, swipe file: `studio-script` (`viral` for the niche research).
+   - A reel of theirs that flopped, to recut or rewrite from what worked for others on the same topic ("my reel flopped", "why this video didn't work", "rescue this reel"): `flop-rescue`.
    - Instagram reels that blew up for their competitors or for one account, turned into 5 remake scripts ("outliers", "what works for my competitors", "videos to remake", "ideas from @someone"): `outliers`.
    - A take or a local file, "my last take", a video URL to edit, an existing slug, short, reel, a full YouTube video: `short-editing`. "In the style of <name>" = `short-editing ... style <name>`.
    - Their B-roll ("add these clips", "my B-roll", "put my B-roll on this short", find a shot, drop a clip): `broll` (`setup`, `add`, `use`, `search`, `reject`).

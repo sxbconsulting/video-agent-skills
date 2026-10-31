@@ -39,6 +39,7 @@ Every short comes out in the same finished look, with no setting to touch:
 | `/insta-audit` | Installs Treg if needed, connects your Instagram and audits it: your last reels with real stats (views, watch time, saves, shares), what over-performs against your own median, the first seconds of your best and worst reels, and the 3 changes to make, in `audit.md`. `/insta-audit @handle` adds up to 5 competitors and a sourced HTML report (paid calls, price said first). |
 | `/studio-script` | A week of scripts from what really happened in your week, in your voice: 3 hooks per script from 22 formulas, scored, a re-hook, timing checked at your pace, visual notes, then a humanize pass (invisible characters, AI words in English and French, AI sentence shapes, facts checked). Also `viral` (what over-performs in your niche: recent Shorts of 10 to 12 accounts, outliers against each account's median, the first 3 seconds of each, saved to `swipe.md`), `hook <topic>` and `humanize <text>` for any caption or description. |
 | `/outliers` | The reels and TikToks that blew up for your competitors, measured against each account's own median (3x or more, sponsored reels out), from a watchlist it builds and grows with you (70 % your main language, 30 % a second one), plus your own best reels. Repeated hits (a recipe) beat lucky ones; the 5 best become remake scripts in your voice. `/outliers @handle` (or `tiktok:handle`, `yt:handle`) digs one account. Free: Instagram read in your own logged-in Chrome (Claude in Chrome), TikTok and YouTube with yt-dlp. |
+| `/flop-rescue` | Rechecks a reel that flopped: why it probably lost people, which reels on the same topic really worked (each proven against its own account's median), their hook and script, then a timecoded recut of your footage or a new script. Free: your logged-in Chrome, yt-dlp, local Whisper. Needs `outliers`, `studio-script` and `short-editing`. |
 | `/short-editing` | A raw take into a finished video: a short (1080×1920, split-screen paper look, everything in the platforms' safe zone) or a full YouTube video (1920×1080, same look side by side). Silences and retakes cut, the take sped to 1.15x, boards on the exact word (titles, lists, numbers, before/after, terminal, screenshots, real tool logos), hard cuts between split, paper and full camera, hook with sound effects, captions, a comment CTA, your logo and end card, voice at -14 LUFS, an .srt for CapCut or Premiere, and the post copy. |
 | `/steal` | Copies another creator's editing style from one of their reels: measures it with ffmpeg (cuts per second, layouts, captions, the beat and the sound effects on a spectrogram, the music level under the voice, the face size and the zooms), writes it to `video-agent/styles/<name>.md`, then edits a test video with `short-editing` and compares the two frame by frame. Then `/short-editing <take> style <name>` uses it. |
 | `/broll` | Your own B-roll (clips, screen recordings, photos) as a library Claude searches in one grep: scanned once with ffmpeg (length, orientation, date, GPS, a contact sheet per clip), tagged by cheap Haiku sub-agents (title, mood, keywords, you on screen or not). `/broll add` for new clips, `/broll use` puts the right ones full screen on the short in progress, checked by eye first. |
@@ -100,6 +101,7 @@ On claude.ai: zip one skill folder and upload it in the Skills part of the setti
 /outliers              what blew up for your competitors → 5 remake scripts
 /studio-script         this week's scripts → video-agent/scripts/
                        record them (phone, camera, webcam) → video-agent/takes/
+/flop-rescue           a reel that flopped → a recut or a new script
 /short-editing         each take → video-agent/edits/short-<slug>/output/ (9:16, 1:1 or 16:9)
 /broll                 your own clips → a library, placed on your edits
 /steal                 a creator's reel → a second style short-editing can use
@@ -144,7 +146,7 @@ video-agent/
 | ffmpeg | cuts, audio, conversions | free |
 | yt-dlp + deno | YouTube views, captions, transcripts | free |
 | Chrome (or a headless Chromium) + whisper.cpp | the render and the word timings, installed by `engine/setup.mjs` on the first edit (about 0.6 GB, once) | free |
-| Claude in Chrome | `outliers`: reads your competitors' Instagram reels in your own logged-in Chrome | free |
+| Claude in Chrome | `outliers`, `flop-rescue`: reads your competitors' Instagram reels in your own logged-in Chrome | free |
 | Treg (optional) | your Instagram audit, publishing on YouTube, Instagram and TikTok (CLI with Python 3.12+ on macOS and Linux, or the MCP on any OS) | your own accounts free, other accounts about $0.001 a call, $1 free credit on signup |
 | ElevenLabs (optional) | `short-translate`, with your API key | your ElevenLabs plan |
 | Codex (optional) | `codex-images`, `vox` (`npm i -g @openai/codex`) | your ChatGPT plan |
