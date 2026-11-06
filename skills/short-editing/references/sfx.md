@@ -36,7 +36,7 @@ Levelled on their own in the mix: `gain` = dB under the voice (default -10). `pe
 | `glass-shatter.mp3` | 1.6 s | a screen or a logo that breaks (`shatter` item) | `{at: <breakAt>, src, peak: true}` |
 | `pop-back.mp3` | 1.0 s | an Instagram UI coming back, a vanish ending | |
 
-The full library (about 20 sounds: coin, unlock, mail ding, stamp, slam, crumple, dust, snip, gears, a hard-cut kit for fast styles...) comes with Editing IA Pro.
+The full library (about 20 sounds: coin, unlock, mail ding, stamp, slam, crumple, dust, snip, gears, a hard-cut kit for fast styles...) is not part of this pack.
 
 ## Example
 

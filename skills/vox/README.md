@@ -14,7 +14,7 @@ Un skill pour Claude Code qui transforme une simple photo en animation façon do
 2. **Ajoute le skill à Claude**, dans le dossier de ton projet :
 
    ```bash
-   npx skills add Melvynx/video-agent-skills --skill vox -a claude-code
+   npx skills add sxbconsulting/video-agent-skills --skill vox -a claude-code
    ```
 
 3. **Envoie ta photo et décris ton idée** dans Claude Code :
@@ -41,9 +41,9 @@ A Claude Code skill that turns one photo into an animation in the style of Vox e
 
 ```bash
 npm i -g @openai/codex && codex login          # Codex makes the images with your ChatGPT plan
-npx skills add Melvynx/video-agent-skills --skill vox -a claude-code
+npx skills add sxbconsulting/video-agent-skills --skill vox -a claude-code
 ```
 
 Then in Claude Code: `/vox <photo> <your animation idea>`. Needs ffmpeg and Node 20+.
 
-Part of [video-agent-skills](https://github.com/Melvynx/video-agent-skills): free skills to script, edit and publish your videos with Claude Code.
+Part of [video-agent-skills](https://github.com/sxbconsulting/video-agent-skills): free skills to script, edit and publish your videos with Claude Code.
