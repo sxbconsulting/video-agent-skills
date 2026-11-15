@@ -319,7 +319,7 @@ For an audio-only video, the speaker is a die-cut sticker of their head (`engine
 - `bills {from, at, to, n}` paper dollar bills flutter down (money gag). `confetti {from, at, to, x, y, n, power}` paper confetti burst.
 
 ### Clean layout: slide (stage)
-Rejected by the creator on 2026-10-07 (camera always at the bottom, too much text): never use it for his shorts; his look is the paper stage with `layout.frame`. Kept only as engine code. With `layout.card` (style the creator Clean, reference `shorts/short-claude-5x-value-clean/`), one `slide` = one idea held 6 to 20 s. Full parameters in the header of `engine/lib/scenes-clean.js`.
+Kept only as engine code; the default look is the paper stage with `layout.frame`. With `layout.card` (the Clean style), one `slide` = one idea held 6 to 20 s. Full parameters in the header of `engine/lib/scenes-clean.js`.
 - `{type: 'slide', from, to, pre, eyebrow, title: [l1, l2], hl: ['word'], size: 90, items: [...]}`: blue eyebrow at y 231, a heavy 2-line headline that auto-shrinks to 960 px (words in `hl` turn blue), then white glass cards in the zone y 500 to 890 (the caption pill sits at ~968, keep items above it). The slide blurs out at `to` while the next one blurs in.
 - Items (absolute 1080 px coords), each with `at`, `outAt`, `dimAt`, `ringAt`:
   - `row`: logo, title, sub, pill; `strikeAt` strikes the title and swaps the pill for `pillAlt`.

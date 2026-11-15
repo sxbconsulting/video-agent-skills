@@ -52,7 +52,7 @@ One take of a person talking, turned into a fast, clean short that holds attenti
 
 ## CTA
 
-"Comment GUIDE and I'll send it": full camera, the Instagram (or TikTok) comment sheet as an HTML overlay with the word typed in, then the DM notification (copy `examples/thinking-orbs/source/ig-cta.html`). The handle and avatar are the creator's.
+"Comment GUIDE and I'll send it": full camera, the Instagram (or TikTok) comment sheet as an HTML overlay with the word typed in, then the DM notification (an HTML page with `window.setT(t)`, captured with `--alpha`). The handle and avatar are the creator's.
 
 ## Safe zone
 

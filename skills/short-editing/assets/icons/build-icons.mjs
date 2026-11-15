@@ -1,5 +1,5 @@
 // House icon set = Google Noto Emoji (Apache 2.0, github.com/googlefonts/noto-emoji), the default icon library everywhere
-// (the creator 2026-10-15, after a side-by-side test of Fluent 3D, Noto and Phosphor on the Editing IA Pro VSL).
+// (the creator 2026-10-15, after a side-by-side test of Fluent 3D, Noto and Phosphor).
 // Bare color emoji on transparent, never on a tile: <name>.png and glyph/<name>.png are the same 512 px image
 // (both paths kept so older specs keep working), svg/<name>.svg is the source.
 // The names stay the house names, so specs that use assets/icons/<name>.png or glyph/<name>.png keep working.

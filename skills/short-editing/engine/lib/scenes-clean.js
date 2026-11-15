@@ -1,4 +1,4 @@
-// Clean scenes: the "AI OS explainer" look (layout.card + paper.bg 'clean', first used by short-claude-5x-value-clean).
+// Clean scenes: the "AI OS explainer" look (layout.card + paper.bg 'clean').
 // One slide = one idea held 6 to 14 s: an accent eyebrow, a heavy 2-line headline that stays put, and white glass cards
 // in the zone under it (y 500 to 880) that build up on the narrator's words. Times are SHORT time (mapped by mapSpec).
 //   slide (stage) {from, to, pre, eyebrow, title: [l1, l2] | 'one line', hl: ['word'], size: 90, y: 350, items: [...]}

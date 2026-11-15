@@ -1,0 +1,110 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden;font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;color:#15171C}
+#s{position:absolute;inset:0}#s div{position:absolute;box-sizing:border-box}
+</style></head><body><div id="s"></div><script>
+const DUR=59.43,INK='#15171C',AC='#FF5A1F',GR='#149A4A',RD='#E5383B',MU='#8A8F98',CARD='#FFFFFF';
+const OLD=[0,1.86,2.71,4.77,6.53,10.16,14.79,18.89,23.33,26.83,31.27,33.33,36.05,38.63,41.61,43.46,48.66,50.6,DUR+1];
+const B=[0, 1.9, 2.77, 4.87, 6.66, 10.37, 15.08, 19.27, 23.13, 25.73, 30.27, 32.36, 35.14, 37.77, 40.81, 42.7, 46.97, 49.27, 60.43];
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),ez=x=>1-Math.pow(1-cl(x),3),P=(t,at,d=.28)=>ez((t-at)/d);
+const lerp=(a,b,k)=>a+(b-a)*k;
+const box=(x,y,w,h,st='',c='')=>`<div style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${st}">${c}</div>`;
+// centered text; k = entrance 0..1 (fade + rise)
+const T=(s,x,y,size,o={})=>{const k=o.k??1,w=o.w??1000;return `<div style="left:${x-w/2}px;top:${y-size*.62+(1-k)*26}px;width:${w}px;text-align:center;font-size:${size}px;line-height:1.1;font-weight:${o.wt||800};letter-spacing:-.02em;color:${o.c||INK};opacity:${k*(o.a??1)}">${s}</div>`};
+const card=(x,y,w,h,c='',o={})=>{const k=o.k??1,s=lerp(.86,1,k);return box(x,y,w,h,`background:${o.bg||CARD};border-radius:${o.r||32}px;box-shadow:0 14px 36px rgba(20,20,30,.16);opacity:${k*(o.a??1)};transform:scale(${s}) rotate(${o.rot||0}deg);${o.b?`border:6px solid ${o.b};`:''}overflow:hidden`,c)};
+const strike=(x,y,w,k,c=RD)=>box(x,y-5,w*k,10,`background:${c};border-radius:5px;transform:rotate(-3deg);transform-origin:left center`);
+const check=(x,y,s,k,c=GR)=>k<=0?'':box(x-s/2,y-s/2,s,s,`background:${c};border-radius:50%;transform:scale(${k});opacity:${k}`,`<svg viewBox="0 0 100 100" style="position:absolute;inset:0"><path d="M27 52l16 16 31-35" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+const cross=(x,y,s,k)=>k<=0?'':box(x-s/2,y-s/2,s,s,`background:${RD};border-radius:50%;transform:scale(${k});opacity:${k}`,`<svg viewBox="0 0 100 100" style="position:absolute;inset:0"><path d="M32 32l36 36M68 32l-36 36" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>`);
+const stamp=(s,x,y,size,k,c=RD,rot=-7)=>k<=0?'':`<div style="left:${x-420}px;top:${y-size}px;width:840px;text-align:center;opacity:${k};transform:scale(${lerp(1.6,1,k)}) rotate(${rot}deg)"><span style="display:inline-block;padding:10px 30px;border:8px solid ${c};border-radius:18px;color:${c};font-size:${size}px;font-weight:900;background:rgba(255,255,255,.88)">${s}</span></div>`;
+const rays=(x,y,r,k,c=AC,n=12)=>{let o='';for(let i=0;i<n;i++){const a=i/n*6.283;o+=`<line x1="${x+Math.cos(a)*r*.62}" y1="${y+Math.sin(a)*r*.62}" x2="${x+Math.cos(a)*lerp(r*.62,r,k)}" y2="${y+Math.sin(a)*lerp(r*.62,r,k)}" stroke="${c}" stroke-width="10" stroke-linecap="round" opacity="${k}"/>`}return `<svg width="1080" height="1200" style="position:absolute;left:0;top:0">${o}</svg>`};
+
+const beats=[
+t=>{ // hook: the promise + the logo that sells nothing
+  return T('4 ans de coaching',540,380,104)+T('<span style="color:'+AC+'">en 60 secondes</span>',540,510,104)
+   +card(290,620,500,380,box(150,30,200,200,`border-radius:50%;background:${INK};color:#fff;font-size:44px;font-weight:900;display:flex;align-items:center;justify-content:center;transform:rotate(${t*40-20}deg)`,'LOGO')+T('Ventes : 0',250,300,56,{w:500}))
+   +stamp('0 VENTE',540,860,74,P(t,.9,.18))},
+t=>{const n='MAISON ÉLÉGANCE',c=Math.floor(cl((t-1.86)/.35)*n.length);
+  return T('Ton nom de marque',540,470,88)+card(90,590,900,190,T(n.slice(0,c),450,95,80,{w:900,c:AC}),{})+strike(120,685,840,P(t,2.3,.2))+T('non plus.',540,900,88,{k:P(t,2.2)})},
+t=>{const f=P(t,3.9,.4);let o=T(f>.5?'<span style="color:'+AC+'">1 seule offre</span>':'Avant d\'en créer 5',540,400,92);
+  for(let i=0;i<5;i++){const main=i==2,x=lerp(50+i*200,main?340:50+i*200,f),y=lerp(560,main?510:760,f),w=lerp(180,main?400:180,f),h=lerp(250,main?430:250,f);
+   o+=card(x,y,w,h,T('Offre',w/2,h/2-14,lerp(40,76,main?f:0),{w,c:main?AC:INK})+T(String(i+1),w/2,h/2+lerp(50,90,main?f:0),lerp(46,86,main?f:0),{w,c:MU,a:main?1-f:1}),{k:P(t,2.75+i*.1,.2),a:main?1:1-f,b:main&&f>.5?AC:null,rot:main?0:(i-2)*f*12})}
+  return o+check(760,540,90,P(t,4.3,.2))},
+t=>{let o=`<svg width="1080" height="1200" style="position:absolute;left:0;top:0">`;
+  [230,165,100,40].forEach((r,i)=>o+=`<circle cx="540" cy="700" r="${r}" fill="${i%2?'#fff':AC}" opacity="${i%2?1:.92}" stroke="#fff" stroke-width="4"/>`);
+  const crowd=1-P(t,5.5,.35);for(let i=0;i<22;i++){const a=i/22*6.283,R=345+(i%3)*40;o+=`<circle cx="${540+Math.cos(a)*R*(1+(1-crowd)*.4)}" cy="${700+Math.sin(a)*R*.86*(1+(1-crowd)*.4)}" r="17" fill="${MU}" opacity="${crowd*.75}"/>`}
+  const k=P(t,5.15,.22),x=lerp(1090,540,k),y=lerp(380,700,k);o+=`<line x1="${x}" y1="${y}" x2="${x+150}" y2="${y-90}" stroke="${INK}" stroke-width="16" stroke-linecap="round"/></svg>`;
+  return o+T('Un problème <span style="color:'+AC+'">précis</span>',540,350,92)},
+t=>{let o=T('Simple',270,350,70)+T('Belle',810,350,70,{k:P(t,8.9),c:MU});
+  const shop=(x,col,txt)=>box(x,410,420,560,`background:#fff;border-radius:36px;box-shadow:0 14px 36px rgba(20,20,30,.16);overflow:hidden`,box(0,0,420,170,`background:${col}`,T(txt,210,88,44,{w:420})));
+  o+=shop(60,'#E7E8EA','Un produit');
+  const n=[7.3,7.7,8.1,8.5,8.9,9.3].filter(a=>t>=a).length;
+  [7.3,8.0,8.7,9.3].forEach((a,i)=>{const k=P(t,a,.2);if(k>0)o+=box(95,860-i*92,350,74,`background:${GR};color:#fff;border-radius:37px;font-size:38px;font-weight:800;text-align:center;line-height:74px;opacity:${k*(i==3?1:.95)}`,'+1 vente')});
+  const r=P(t,8.9);if(r>0){o+=`<div style="left:0;top:0;width:1080px;height:1200px;opacity:${r}">`+shop(600,'linear-gradient(120deg,#FFB199,#B79CFF)','Superbe design')+`</div>`+stamp('0 VENTE',810,830,58,P(t,9.75,.16))}
+  return o},
+t=>{const k=P(t,12.3,1.7),seg=[['Pub',.3],['Produit',.3],['Frais',.2]],W=920;let x=80,o=T('Ton <span style="color:'+AC+'">chiffre d\'affaires</span>',540,370,84,{w:1040});
+  o+=T(k>.75?'≠ ce qui te reste':'',540,480,70,{k:P(t,13.9)});
+  o+=box(80,590,W,170,`background:#E7E8EA;border-radius:26px`);
+  seg.forEach(([n,f],i)=>{const a=P(t,10.6+i*.35,.25),out=cl((k*3)-i),w=W*f;o+=box(x,590,w,170,`background:${['#7A808A','#555B65','#34383F'][i]};opacity:${a*(1-out)};color:#fff;font-size:44px;font-weight:800;text-align:center;line-height:170px;`,n);x+=w});
+  o+=box(80+W*.8,590,W*.2,170,`background:${AC};opacity:${P(t,11.6)};border-radius:0 26px 26px 0;color:#fff;font-size:40px;font-weight:900;text-align:center;line-height:170px`,'Marge');
+  return o+T('Regarde d\'abord ça ↑',80+W*.9-110,840,52,{w:560,k:P(t,13.9),c:AC})},
+t=>{const v=P(t,17.9,.25),dim=P(t,16.6);let o=T('Une formation',540,370,88,{a:lerp(1,.4,dim)});
+  o+=card(190,450,700,350,box(300,120,110,110,`background:${INK};border-radius:50%`,`<svg viewBox="0 0 100 100" style="position:absolute;inset:0"><path d="M40 30l32 20-32 20z" fill="#fff"/></svg>`)+box(50,285,600*cl((t-14.8)/3),18,`background:${AC};border-radius:9px`),{a:lerp(1,.45,dim)});
+  if(v>0){o+=rays(540,630,440,v,GR,16)+card(90,520-(1-v)*120,900,260,check(135,130,130,v)+T('Ta première vente',580,95,72,{w:720})+T('Une vraie sensation',580,175,48,{w:720,c:MU}),{k:v,b:GR})}
+  return o},
+t=>{const off=P(t,20.6,.22),g=cl((t-21.2)/1.5);let o=T('Ton salaire : tu le gardes',540,360,76);
+  o+=card(170,440,740,160,T('Démissionner pour te motiver',370,80,46,{w:720}),{k:P(t,19)})+strike(195,520,690,off);
+  o+=T('Charge mentale',540,700,56,{k:P(t,21)})+box(120,760,840,70,`background:#E7E8EA;border-radius:35px`,box(0,0,840*g,70,`background:linear-gradient(90deg,#FFB020,${RD});border-radius:35px`));
+  return o+T(g>=1?'ça ne sert à rien':'',540,920,62,{c:RD,k:P(t,22.6)})},
+t=>{const k=cl((t-23.5)/1.5),a=k*6.283/12*1;let o=`<svg width="1080" height="1200" style="position:absolute;left:0;top:0"><circle cx="540" cy="620" r="190" fill="#fff" stroke="${INK}" stroke-width="12"/>`;
+  const e=k*Math.PI/6*2;o+=`<path d="M540 620L540 430A190 190 0 0 1 ${540+Math.sin(e)*190} ${620-Math.cos(e)*190}Z" fill="${AC}"/>`;
+  o+=`<line x1="540" y1="620" x2="${540+Math.sin(e)*150}" y2="${620-Math.cos(e)*150}" stroke="${INK}" stroke-width="10" stroke-linecap="round"/><circle cx="540" cy="620" r="14" fill="${INK}"/></svg>`;
+  o+=T('1 h par jour',540,360,100);
+  'LMMJVSD'.split('').forEach((d,i)=>{const f=P(t,24.5+i*.2,.15);o+=box(120+i*122,860,104,104,`border-radius:50%;background:${f>.5?GR:'#E7E8EA'};color:${f>.5?'#fff':INK};font-size:46px;font-weight:800;text-align:center;line-height:104px;transform:scale(${lerp(.86,1,f)})`,d)});
+  return o+T(t>25.4?'ça suffit':'',540,1040,0)},
+t=>{const c=P(t,29.2,.25);let o=T(c>.5?'Copier bêtement ?':'Inspire-toi',540,370,96,{c:c>.5?RD:INK});
+  if(c<1)o+=`<div style="left:0;top:0;width:1080px;height:1200px;opacity:${1-c}">`+card(70,480,400,400,T('Ce qui marche',200,190,56,{w:360}),{k:P(t,27)})+T('→',540,680,110,{c:AC,k:P(t,27.8)})+card(610,480,400,400,T('Ton angle',200,190,62,{w:360,c:AC}),{k:P(t,28.6),b:AC,rot:(1-P(t,28.6))*-14})+`</div>`;
+  if(c>0){o+=card(120,500,400,360,T('Sa pub',200,170,60,{w:400}),{k:c})+card(560,500,400,360,T('Sa pub',200,170,60,{w:400,c:MU}),{k:P(t,29.6),a:.8});o+=stamp('RIEN DE GARANTI',540,780,62,P(t,30.7,.18))}
+  return o},
+t=>{const d=P(t,31.35,.4),op=P(t,32.0,.25);let o=T('Ton produit',540,370,96)+T('<span style="color:'+AC+'">en main</span> avant de vendre',540,480,70,{k:P(t,32.3)});
+  const y=lerp(100,640,d);o+=box(370,y,340,280,`background:#C99A66;border-radius:14px;box-shadow:0 14px 30px rgba(0,0,0,.2)`,box(145,0,50,280,`background:#E6C8A0`));
+  o+=box(370-(op*80),y-30-op*50,340+op*160,50,`background:#B98752;border-radius:10px;transform:rotate(${op*-8}deg)`);
+  return o+check(760,700,110,P(t,32.4,.2))},
+t=>{let o=T('Ta première pub',540,370,88);[[34.1,0],[34.7,0],[35.4,1]].forEach(([a,g],i)=>{const k=P(t,33.4+i*.15,.2),r=P(t,a,.18);o+=card(60+i*330,470,300,400,T('Pub '+(i+1),150,110,62,{w:300})+(g?check(150,260,140,r):cross(150,260,140,r)),{k,b:r>.5?(g?GR:RD):null})});
+  return o+T('Normal.',540,970,76,{k:P(t,35.55),c:AC})},
+t=>{let o=T('Teste des <span style="color:'+AC+'">angles</span>',540,370,92);['Le problème','Le résultat','La preuve'].forEach((s,i)=>{const k=P(t,36.2+i*.35,.2);o+=box(170,450+i*105,740,88,`background:${AC};color:#fff;border-radius:44px;font-size:48px;font-weight:800;text-align:center;line-height:88px;opacity:${k};transform:translateX(${(1-k)*-80}px)`,s)});
+  const c=P(t,37.75,.15);['#F4B6C2','#BCE7D3','#BFD3F6','#F7E08C','#D6C2F4'].forEach((col,i)=>o+=box(190+i*145,790,120,120,`background:${col};border-radius:20px;opacity:${P(t,37.5,.15)*lerp(1,.45,P(t,38.2))}`));
+  return o+strike(170,850,740,P(t,38.15,.18))},
+t=>{let o=T('L\'IA te fait gagner du temps',540,360,70,{w:1040});const L=['Ton texte de vente…','Trois avantages clairs','Livraison en 24 h ?','Une offre à ne pas rater'];
+  o+=card(100,440,880,500,box(36,28,110,60,`background:${AC};color:#fff;border-radius:16px;font-size:40px;font-weight:900;text-align:center;line-height:60px`,'IA')+L.map((s,i)=>{const n=Math.floor(cl((t-38.9-i*.35)/.35)*s.length);return `<div style="left:40px;top:${118+i*88}px;width:800px;font-size:48px;font-weight:600">${s.slice(0,n)}</div>`}).join(''));
+  const c=P(t,40.3,.4);o+=`<svg width="1080" height="1200" style="position:absolute;left:0;top:0"><ellipse cx="370" cy="762" rx="300" ry="56" fill="none" stroke="${RD}" stroke-width="9" stroke-dasharray="1500" stroke-dashoffset="${1500*(1-c)}" transform="rotate(-2 370 762)"/></svg>`;
+  return o+T('Relis tout',780,1010,62,{c:RD,k:P(t,40.5),w:400})},
+t=>{let o=T('Tes avis clients',540,380,100);for(let i=0;i<5;i++){const k=P(t,41.75+i*.2,.16),s=lerp(.5,1,k);o+=`<svg viewBox="0 0 100 100" style="position:absolute;left:${85+i*185}px;top:490px;width:170px;height:170px;transform:scale(${s})"><path d="M50 7l13 28 31 4-23 21 6 31-27-15-27 15 6-31L6 39l31-4z" fill="${k>.5?'#FFB400':'#E7E8EA'}"/></svg>`}
+  return o+T('vendent mieux',540,790,86,{k:P(t,42.6),c:AC})+T('que tes phrases',540,890,70,{k:P(t,43)})},
+t=>{const n=P(t,44.14,.3),w=P(t,45.65,.35);let o='';
+  if(w<1){o+=`<div style="left:0;top:0;width:1080px;height:1200px;opacity:${1-w}">`+T('Ta première vente',540,370,88)+card(90,470-(1-n)*90,900,210,check(100,105,130,1)+T('Nouvelle commande',570,75,60,{w:760})+T('39,99 €',570,140,50,{w:760,c:MU}),{k:n})+stamp('PAS RICHE',540,890,70,P(t,45.22,.16),MU)+`</div>`}
+  if(w>0){const m=P(t,47.42,.25);o+=rays(540,640,470,w,AC,18)+T('Tout est',540,560,130,{k:w})+T('possible',540,700,130,{k:P(t,46.55),c:AC})+T('et ça, c\'est magique',540,880,62,{k:m})}
+  return o},
+t=>{const k=cl((t-48.8)/1.3);let o=T('Plus envie ?',540,380,104);o+=box(120,620,840,14,`background:#E7E8EA;border-radius:7px`);const x=lerp(940,120,ez(k));o+=box(x,620,960-x,14,`background:${AC};border-radius:7px`);
+  ['Jour 1','Aujourd\'hui'].forEach((s,i)=>o+=T(s,i?880:200,700,46,{w:360,c:MU}));o+=box(x-32,595,64,64,`background:${AC};border-radius:50%;box-shadow:0 8px 20px rgba(0,0,0,.2)`);
+  return o+T('Rappelle-toi pourquoi',540,860,76,{k:P(t,49.7)})},
+t=>{const b=P(t,57.3,.25),a=P(t,58.8,.25);let o=T('Bootcamp',540,380,120,{k:P(t,50.9),c:AC});
+  o+=box(90,480,420,180,`border:5px dashed #B8BCC2;border-radius:32px;opacity:${P(t,51.6)}`)+box(570,480,420,180,`border:5px dashed #B8BCC2;border-radius:32px;opacity:${P(t,51.6)}`);
+  o+=card(90,480,420,180,T('IA',210,85,110,{w:420}),{k:P(t,54.2)})+T('+',540,560,90,{k:P(t,54.5),c:AC})+card(570,480,420,180,T('E-commerce',210,88,60,{w:420}),{k:P(t,54.7)});
+  o+=T('à côté de ton salaire',540,770,68,{k:b});
+  o+=box(240,860-(a?Math.sin((t-58.8)*0)*0:0),600,120,`background:${INK};color:#fff;border-radius:60px;font-size:60px;font-weight:900;text-align:center;line-height:120px;opacity:${a};transform:scale(${lerp(.8,1,a)})`,'Lien en bio');
+  return o}];
+
+const pad=n=>String(n).padStart(2,'0');
+window.setT=t=>{let i=0;while(i<B.length-2&&t>=B[i+1])i++;
+  const enter=i==0?1:P(t,B[i],.2);let o=`<div style="left:0;top:${(1-enter)*40}px;width:1080px;height:1120px;opacity:${enter};transform-origin:540px 270px;transform:scale(.86)">`+beats[i](t-(B[i]-OLD[i]))+`</div>`;
+  // timer, top: counts down the 60 seconds
+  const left=Math.min(60,Math.max(0,Math.ceil(DUR-t))),sw=(t%60)/60*6.283,urgent=left<=10;
+  o+=box(60,170,330,96,`background:${urgent?AC:INK};border-radius:48px`,`<svg viewBox="0 0 60 60" style="position:absolute;left:16px;top:18px;width:60px;height:60px"><circle cx="30" cy="33" r="21" fill="none" stroke="#fff" stroke-width="5"/><rect x="24" y="3" width="12" height="6" rx="3" fill="#fff"/><line x1="30" y1="33" x2="${30+Math.sin(sw)*15}" y2="${33-Math.cos(sw)*15}" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg><div style="left:88px;top:13px;width:230px;color:#fff;font-size:62px;line-height:70px;font-weight:800;font-variant-numeric:tabular-nums">${pad(Math.floor(left/60))}:${pad(left%60)}</div>`);
+  const num=Math.min(i+1,17);
+  o+=box(i<17?720:800,170,i<17?300:220,96,`white-space:nowrap;background:#fff;border-radius:48px;box-shadow:0 6px 18px rgba(20,20,30,.12);color:${INK};font-size:44px;font-weight:800;text-align:center;line-height:96px`,i<17?`Leçon <span style="color:${AC}">${num}</span>/17`:`Ton tour`);
+  // frise: full width, one notch per lesson
+  const p=cl(t/DUR);o+=box(0,1876,1080,44,'background:rgba(15,16,20,.72)');o+=box(0,1876,1080*p,44,`background:${AC}`);
+  for(let j=1;j<B.length-1;j++)o+=box(B[j]/DUR*1080-2,1876,4,44,`background:rgba(255,255,255,${t>=B[j]?.9:.45})`);
+  o+=box(1080*p-22,1865,44,66,`background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.45)`);
+  document.getElementById('s').innerHTML=o};
+setT(0);
+</script></body></html>

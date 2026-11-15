@@ -89,7 +89,7 @@ One HTML file per component in `source/<name>.html`, 1080 wide (or the card size
 node <skill>/engine/short.mjs capture video-agent/edits/short-<slug> source/<name>.html --dur 4.5 --alpha --out assets/<name>.mov
 ```
 
-Read its `stills/<name>-sheet.jpg`, then wire it: `media: { x: { src: 'assets/<name>.mov', width: 1080, alpha: true } }` plus an `overlay` scene (or an actor on the board), see `examples/thinking-orbs/source/spec.js`.
+Read its `stills/<name>-sheet.jpg`, then wire it: `media: { x: { src: 'assets/<name>.mov', width: 1080, alpha: true } }` plus an `overlay` scene (or an actor on the board), see `examples/analyser-pubs/source/spec.js`.
 
 ## 4. Prepare
 

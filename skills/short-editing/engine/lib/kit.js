@@ -7,7 +7,7 @@ const QS = typeof location !== 'undefined' ? new URLSearchParams(location.search
 export const W = +QS?.get('w') || 1080, H = +QS?.get('h') || 1920;
 const WD = W, HD = H;
 
-// Strict palette: paper, ink, one blue (codelynx.dev/aibuilder --primary #258eff). Grays are ink tints.
+// Strict palette: paper, ink, one blue (#258eff). Grays are ink tints.
 export const C = {
   paper: '#F1EEE6', sheet: '#FCFBF8', ink: '#14161B', ink2: '#5C5F68', ink3: '#A19F98',
   line: '#E3DED3', blue: '#258EFF', blue2: '#1D6FD6', tint: '#E6F0FD', dim: '#D8D3C7', white: '#FFFFFF',
